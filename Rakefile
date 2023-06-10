@@ -1,7 +1,7 @@
 # frozen_string_literal: true
 
+require 'cgi'
 require 'fileutils'
-require 'uri'
 require_relative 'lib/yard2docset'
 
 def mruby_version
@@ -45,14 +45,14 @@ task release: %w[build] do
     <entry>
       <version>#{mruby_version}</version>
       <url>https://github.com/buty4649/mruby-api-docset/releases/download/#{mruby_version}/mruby-#{mruby_version}-api.tgz</url>
-    </entry
+    </entry>
   XML
 
   File.open('README.md', 'a+') do |f|
     feed_url = "https://raw.githubusercontent.com/buty4649/mruby-api-docset/main/mruby-#{mruby_version}-api.xml"
     f.write(<<~README)
       * #{mruby_version}
-        - [Dash](dash-feed://#{URI.encode_www_form(feed_url)})
+        - [Dash](dash-feed://#{CGI.escape(feed_url)})
         - [Zeal](#{feed_url})
     README
   end
