@@ -41,7 +41,7 @@ task 'build' do
 end
 
 task release: %w[build] do
-  File.write("mruby-#{mruby - version}-api.xml", <<~XML)
+  File.write("mruby-#{mruby_version}-api.xml", <<~XML)
     <entry>
       <version>#{mruby_version}</version>
       <url>https://github.com/buty4649/mruby-api-docset/releases/download/#{mruby_version}/mruby-#{mruby_version}-api.tgz</url>
