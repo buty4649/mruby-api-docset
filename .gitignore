@@ -1,4 +1,6 @@
+/.bundle
+/icon.png
 /mruby
 /mruby*zip
 /tmp
-/icon.png
+/vendor
