@@ -26,8 +26,9 @@ task 'build' do
     Rake::Task['doc:api'].invoke
   end
 
+  name = "mruby-#{mruby_version}-api"
   Yard2Docset.convert(yard_dir: 'mruby/doc/api',
-                      name: "mruby-#{mruby_version}-api",
+                      name:,
                       indexfile: 'index.html',
                       icon: 'icon.png',
                       entries: {
