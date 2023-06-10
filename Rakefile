@@ -52,7 +52,7 @@ task release: %w[build] do
     feed_url = "https://raw.githubusercontent.com/buty4649/mruby-api-docset/main/mruby-#{mruby_version}-api.xml"
     f.write(<<~README)
       * #{mruby_version}
-        - [Dash](dash-feed://#{URL.encode(feed_url)})
+        - [Dash](dash-feed://#{URI.encode_www_form(feed_url)})
         - [Zeal](#{feed_url})
     README
   end
