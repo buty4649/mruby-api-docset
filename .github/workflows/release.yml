@@ -24,7 +24,7 @@ jobs:
         VERSION=$(echo ${{ github.ref }} | sed -e "s#refs/tags/v##g")
         echo "VERSION=${VERSION}" >> "$GITHUB_OUTPUT"
     - name: Build
-      run: bundle exec rake build
+      run: bundle exec rake release
     - name: Create a release
       env:
         VERSION: ${{ steps.version.outputs.VERSION }}
@@ -32,3 +32,8 @@ jobs:
       run: |
         echo "VERSION: ${VERSION}"
         gh release create $VERSION tmp/*.tgz
+    - name: Commit & Push changes
+      uses: actions-js/push@master
+      with:
+        github_token: ${{ secrets.GITHUB_TOKEN }}
+        message: "publish ${{ steps.version.outputs.VERSION }}"

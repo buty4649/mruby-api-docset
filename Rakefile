@@ -1,6 +1,7 @@
 # frozen_string_literal: true
 
 require 'fileutils'
+require 'uri'
 require_relative 'lib/yard2docset'
 
 def mruby_version
@@ -25,13 +26,33 @@ task 'build' do
     Rake::Task['doc:api'].invoke
   end
 
-  name = "mruby-#{mruby_version}-api"
-  Yard2Docset.convert(yard_dir: 'mruby/doc/api', name:, indexfile: 'index.html',
+  Yard2Docset.convert(yard_dir: 'mruby/doc/api',
+                      name: "mruby-#{mruby_version}-api",
+                      indexfile: 'index.html',
+                      icon: 'icon.png',
                       entries: {
                         'Function' => 'function_list.html'
                       })
 
   FileUtils.cd 'tmp' do
     sh "tar --exclude='.DS_Store' -cvzf #{name}.tgz #{name}.docset"
+  end
+end
+
+task release: %w[build] do
+  File.write("mruby-#{mruby - version}-api.xml", <<~XML)
+    <entry>
+      <version>#{mruby_version}</version>
+      <url>https://github.com/buty4649/mruby-api-docset/releases/download/#{mruby_version}/mruby-#{mruby_version}-api.tgz</url>
+    </entry
+  XML
+
+  File.open('README.md', 'a+') do |f|
+    feed_url = "https://raw.githubusercontent.com/buty4649/mruby-api-docset/main/mruby-#{mruby_version}-api.xml"
+    f.write(<<~README)
+      * #{mruby_version}
+        - [Dash](dash-feed://#{URL.encode(feed_url)})
+        - [Zeal](#{feed_url})
+    README
   end
 end
