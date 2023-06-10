@@ -1,0 +1,34 @@
+name: Create a release
+
+on:
+  push:
+    tags:
+      - "v[0-9]+\\.[0-9]+\\.[0-9]+"
+
+permissions:
+  contents: write
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    steps:
+    - uses: actions/checkout@v3
+    - name: Set up Ruby
+      uses: ruby/setup-ruby@v1
+      with:
+        ruby-version: 3.2
+        bundler-cache: true
+    - name: version
+      id: version
+      run: |
+        VERSION=$(echo ${{ github.ref }} | sed -e "s#refs/tags/v##g")
+        echo "VERSION=${VERSION}" >> "$GITHUB_OUTPUT"
+    - name: Build
+      run: rake release
+    - name: Create a release
+      env:
+        VERSION: ${{ steps.version.outputs.VERSION }}
+        GH_TOKEN: ${{ github.token }}
+      run: |
+        echo "VERSION: ${VERSION}"
+        gh release create $VERSION tmp/*.tgz
