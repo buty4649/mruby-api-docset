@@ -1,6 +1,5 @@
 # frozen_string_literal: true
 
-require 'cgi'
 require 'fileutils'
 require_relative 'lib/yard2docset'
 
@@ -51,9 +50,7 @@ task release: %w[build] do
   File.open('README.md', 'a+') do |f|
     feed_url = "https://raw.githubusercontent.com/buty4649/mruby-api-docset/main/mruby-#{mruby_version}-api.xml"
     f.write(<<~README)
-      * #{mruby_version}
-        - [Dash](dash-feed://#{CGI.escape(feed_url)})
-        - [Zeal](#{feed_url})
+      * #{mruby_version} [feed](#{feed_url})
     README
   end
 end
